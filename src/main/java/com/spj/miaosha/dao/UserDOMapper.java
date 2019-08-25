@@ -1,7 +1,6 @@
 package com.spj.miaosha.dao;
 
 import com.spj.miaosha.dataobject.UserDO;
-import org.apache.ibatis.annotations.Select;
 
 public interface UserDOMapper {
     int deleteByPrimaryKey(String id);
@@ -15,7 +14,4 @@ public interface UserDOMapper {
     int updateByPrimaryKeySelective(UserDO record);
 
     int updateByPrimaryKey(UserDO record);
-
-    @Select("select * from user_info where id = #{id}")
-    UserDO selectUserDo(String id);
 }

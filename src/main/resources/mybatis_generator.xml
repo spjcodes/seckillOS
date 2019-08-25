@@ -31,7 +31,7 @@
             <property name="trimStrings" value="true" />
         </javaModelGenerator>
 
-        <sqlMapGenerator targetPackage="com.spj.miaosha.mapper"  targetProject="src/main/java">
+        <sqlMapGenerator targetPackage="resources/mapper"  targetProject="src/main">
             <property name="enableSubPackages" value="true" />
         </sqlMapGenerator>
 
