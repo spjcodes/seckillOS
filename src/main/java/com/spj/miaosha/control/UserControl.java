@@ -7,6 +7,7 @@ import com.spj.miaosha.erro.EmBusinssError;
 import com.spj.miaosha.response.CommonReturnType;
 import com.spj.miaosha.service.UserService;
 import com.spj.miaosha.service.model.UserModel;
+import com.sun.xml.internal.rngom.parse.host.Base;
 import org.apache.ibatis.builder.BuilderException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,31 +21,19 @@ import java.util.Map;
 import java.util.Random;
 
 @Controller("user")
+@CrossOrigin
 @RequestMapping("user")
-public class UserControl {
+public class UserControl extends BaseControl {
 
     @Autowired
     private UserService userService;
 
-    //自定义异常 处理未被conreol层吸收的Exception
-    @ExceptionHandler(Exception.class)
-    @ResponseStatus(HttpStatus.OK)
-    @ResponseBody
-    public Object handleException(HttpServletRequest request, Exception e) {
+    @Autowired HttpServletRequest httpServletRequest;
 
-        CommonReturnType commonReturnType  = new CommonReturnType();
-        BusinessException businessException = (BusinessException) e;
-        commonReturnType.setStatus("fail");
-        commonReturnType.setData(e);
-        Map m = new HashMap();
-        m.put("faild",businessException.getErrCode());
-        m.put("status", businessException.getErrMsg());
-        return m;
-    }
 
     @RequestMapping("get")
     @ResponseBody
-    public CommonReturnType getUser(@RequestParam() String id) throws BusinessException {
+    public CommonReturnType getUser  (@RequestParam() String id)  throws BusinessException {
         //调用service服务获取对应id的用户对象返回给前端
         UserModel userModel = userService.getUser(id);
         if (userModel == null)
@@ -64,14 +53,16 @@ public class UserControl {
 
     @RequestMapping("getotp")
     @ResponseBody
-    public CommonReturnType getOtp(@RequestParam() String telephone) {
+    public CommonReturnType getOtp(@RequestParam(name="telephone") String telephone) {
         String otp ;
         Random random = new Random();
         //生成验证码
-        int vaildateCode = random.nextInt(100000);
+        int vaildateCode = random.nextInt(99999);
+        vaildateCode += 10000;
         //将OTP验证码同对应的用户的手机号关联，使用HTTP session的方式绑定(redis适用)
-
+        httpServletRequest.getSession().setAttribute(telephone, vaildateCode);
         //发送给用户
+        System.out.println(httpServletRequest.getSession().getAttribute(telephone));
 
         return CommonReturnType.create(vaildateCode);
     }
