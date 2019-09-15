@@ -15,7 +15,8 @@ import java.util.Map;
 public class BaseControl {
 
     //自定义异常 处理未被conreol层吸收的Exception
-    @ExceptionHandler(Exception.class)
+//    @ExceptionHandler(Exception.class)
+    @ExceptionHandler(BusinessException.class)
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public Object handleException(HttpServletRequest request, Exception e) {
@@ -32,6 +33,7 @@ public class BaseControl {
         } else {
             m.put("erroCode", EmBusinssError.UNKONW_ERRO.getErrCode());
             m.put("erroMsg", EmBusinssError.UNKONW_ERRO.getErrMsg());
+            System.out.println(e);
         }
         return m;
     }

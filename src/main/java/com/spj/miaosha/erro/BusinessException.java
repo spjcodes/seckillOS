@@ -15,6 +15,10 @@ public class BusinessException extends Exception implements CommonError {
         this.commonError.setErrMsg(errMsg);
     }
 
+    public BusinessException(EmBusinssError paramterNotValid, CommonError fj) {
+
+    }
+
     @Override
     public int getErrCode() {
         return this.commonError.getErrCode();

@@ -8,6 +8,10 @@ public class UserVO {
 
     private String name;
 
+    private String encrpt_password;
+
+    private String varificationCode;
+
     private Boolean gender;
 
     private Integer age;

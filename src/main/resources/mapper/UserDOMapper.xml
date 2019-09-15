@@ -26,8 +26,8 @@
 
   <insert id="insert" parameterType="com.spj.miaosha.dataobject.UserDO">
       <!--主键使用uuid生成策略-->
-    <selectKey  keyProperty="UserDO.id" resultType="java.lang.String" order="BEFORE">
-      select uuid()
+    <selectKey keyProperty="id" resultType="String" order="BEFORE">
+      select replace(uuid(),'-','') from dual
     </selectKey>
     insert into user_info (id, name, gender, 
       age, telephone, register_mode, 
@@ -37,8 +37,13 @@
       #{thirdPartyId,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.spj.miaosha.dataobject.UserDO">
+    <!--主键使用uuid生成策略-->
+    <selectKey keyProperty="id" resultType="String" order="BEFORE">
+      select replace(uuid(),'-','') from dual
+    </selectKey>
     insert into user_info
     <trim prefix="(" suffix=")" suffixOverrides=",">
+
       <if test="id != null">
         id,
       </if>
