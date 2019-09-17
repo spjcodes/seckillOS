@@ -8,5 +8,7 @@ public interface UserService {
     public UserModel getUser(String id);
     public boolean addUser(UserModel userModel) throws BusinessException;
     public boolean deleteUser(String id);
+    public UserModel validateLoginByUserName(String username, String password) throws BusinessException;
+    public UserModel validateLoginByTelephone(String telephone, String password) throws BusinessException;
 
 }

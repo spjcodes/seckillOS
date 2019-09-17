@@ -8,7 +8,7 @@ import com.spj.miaosha.erro.BusinessException;
 import com.spj.miaosha.erro.EmBusinssError;
 import com.spj.miaosha.service.UserService;
 import com.spj.miaosha.service.model.UserModel;
-import com.sun.tools.internal.ws.wsdl.framework.DuplicateEntityException;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
@@ -33,6 +33,38 @@ public class UserviceImpl implements UserService {
         //通过用户id获取对应的加密密码信息
         UserPasswordDO userPasswordDO = userPasswordDOMapper.selectByUserid(userDO.getId());
         return convertFromDataObject(userDO, userPasswordDO);
+    }
+
+    @Override
+    public UserModel validateLoginByUserName(String username, String password) throws BusinessException {
+        UserDO userDO = new UserDO();
+        UserPasswordDO passwordDO = new UserPasswordDO();
+        userDO = userDOMapper.selectByName(username);
+        if (userDO == null)
+            throw new BusinessException(EmBusinssError.USER_LOGIN_FAILD);
+        passwordDO = userPasswordDOMapper.selectByPassword(password);
+        if(userDO.getName() == null || passwordDO.getEncrptPassword() == null)
+            throw new BusinessException(EmBusinssError.USERNAMW_OR_PASSwoRD_ERRO);
+        if (StringUtils.equals(userDO.getName(),username))
+            if (StringUtils.equals(passwordDO.getEncrptPassword(),password))
+                return convertFromDataObject(userDO, passwordDO);
+        return null;
+    }
+
+    @Override
+    public UserModel validateLoginByTelephone(String telephone, String encrpe_password) throws BusinessException {
+        UserDO userDO = new UserDO();
+        UserPasswordDO passwordDO = new UserPasswordDO();
+        userDO = userDOMapper.selectDoByTelephone(telephone);
+        if (userDO == null)
+            throw new BusinessException(EmBusinssError.USER_LOGIN_FAILD);
+        passwordDO = userPasswordDOMapper.selectByUserid(userDO.getId());
+        if(userDO.getName() == null || passwordDO.getEncrptPassword() == null)
+            throw new BusinessException(EmBusinssError.USERNAMW_OR_PASSwoRD_ERRO);
+        if (StringUtils.equals(userDO.getTelephone(),telephone))
+            if (StringUtils.equals(passwordDO.getEncrptPassword(),encrpe_password))
+                return convertFromDataObject(userDO, passwordDO);
+        return null;
     }
 
     @Transactional

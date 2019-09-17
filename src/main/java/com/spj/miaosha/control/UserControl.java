@@ -30,6 +30,17 @@ public class UserControl extends BaseControl {
    @Autowired
     private HttpServletRequest httpServletRequest;
 
+    @RequestMapping("login")
+    @ResponseBody
+    public CommonReturnType login(@RequestBody UserVO userVO) throws BusinessException, UnsupportedEncodingException, NoSuchAlgorithmException {
+        if(userVO.getTelephone() == null||
+        userVO.getEncrpt_password() == null)
+            throw new BusinessException(EmBusinssError.USERNAMW_OR_PASSwoRD_ERRO);
+        UserModel userModel = userService.validateLoginByTelephone(userVO.getTelephone(), encoderByMD5(userVO.getEncrpt_password()));
+        if (userModel != null)
+            return CommonReturnType.create(userModel);
+        return  CommonReturnType.create(userModel, "登陆失败");
+    }
 
     @RequestMapping("register")
     @ResponseBody

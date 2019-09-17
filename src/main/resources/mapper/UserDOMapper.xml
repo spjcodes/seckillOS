@@ -129,4 +129,16 @@
     from user_info
     where telephone = #{id, jdbcType=VARCHAR }
   </select>
+  <select id="selectByName" parameterType="string" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from user_info
+    where name = #{name, jdbcType=VARCHAR }
+  </select>
+  <select id="selectDoByTelephone" parameterType="string" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from user_info
+    where telephone = #{telephone, jdbcType=VARCHAR}
+  </select>
 </mapper>
