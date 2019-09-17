@@ -8,9 +8,12 @@ import com.spj.miaosha.erro.BusinessException;
 import com.spj.miaosha.erro.EmBusinssError;
 import com.spj.miaosha.service.UserService;
 import com.spj.miaosha.service.model.UserModel;
+import com.sun.tools.internal.ws.wsdl.framework.DuplicateEntityException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class UserviceImpl implements UserService {
@@ -32,13 +35,18 @@ public class UserviceImpl implements UserService {
         return convertFromDataObject(userDO, userPasswordDO);
     }
 
+    @Transactional
     @Override
-    public boolean addUser(UserModel userModel) {
+    public boolean addUser(UserModel userModel) throws BusinessException {
         if (userModel == null)
             return false;
         UserDO userDo = this.convertFromUserModel(userModel);
         userDo.setThirdPartyId("1312554");
-        userDOMapper.insertSelective(userDo);
+        try {
+            userDOMapper.insertSelective(userDo);
+        } catch (DuplicateKeyException dup) {
+           throw new BusinessException(EmBusinssError.PARAMTER_NOT_VALID,"该手机号已注册");
+        }
         UserPasswordDO userPasswordDO = this.convertFormUserModel(userModel);
         userPasswordDOMapper.insertSelective(userPasswordDO);
         return true;
@@ -57,7 +65,9 @@ public class UserviceImpl implements UserService {
     convertFormUserModel (UserModel userModel) {
         if (userModel.getEncrptPassword() != null ) {
             UserPasswordDO  userPasswordDO = new UserPasswordDO();
-            userPasswordDO.setUserId(userModel.getId());
+            //获取注册用户的id，给password表赋值
+            String userId = (String) userDOMapper.selectIdByTelephone(userModel.getTelephone());
+            userPasswordDO.setUserId(userId);
             userPasswordDO.setEncrptPassword(userModel.getEncrptPassword());
             return userPasswordDO;
         }

@@ -6,6 +6,7 @@ import com.spj.miaosha.erro.EmBusinssError;
 import com.spj.miaosha.response.CommonReturnType;
 import com.spj.miaosha.service.UserService;
 import com.spj.miaosha.service.model.UserModel;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -42,8 +43,17 @@ public class UserControl extends BaseControl {
             throw new BusinessException(EmBusinssError.VERIFICATION_CODE_ERRO);*/
 
         //用户注册
-        if(userVO == null)
+
+        if(StringUtils.isEmpty(userVO.getName())
+        || StringUtils.isEmpty(userVO.getEncrpt_password())
+        || StringUtils.isEmpty(userVO.getVarificationCode())
+        || userVO.getGender() == null
+        || userVO.getAge() == null
+        || StringUtils.isEmpty(userVO.getTelephone())
+        ){
             throw new BusinessException(EmBusinssError.USER_NOTE_EXISTS);
+        }
+
         UserModel userModel = this.convertFormUservo(userVO);
         userService.addUser(userModel);
         return CommonReturnType.create(userModel);

@@ -124,4 +124,9 @@
       third_party_id = #{thirdPartyId,jdbcType=VARCHAR}
     where id = #{id,jdbcType=VARCHAR}
   </update>
+  <select id="selectIdByTelephone" parameterType="string" resultType="string">
+    select id
+    from user_info
+    where telephone = #{id, jdbcType=VARCHAR }
+  </select>
 </mapper>
