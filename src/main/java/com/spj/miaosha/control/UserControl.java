@@ -6,6 +6,8 @@ import com.spj.miaosha.erro.EmBusinssError;
 import com.spj.miaosha.response.CommonReturnType;
 import com.spj.miaosha.service.UserService;
 import com.spj.miaosha.service.model.UserModel;
+import com.spj.miaosha.validator.ValidationResult;
+import com.spj.miaosha.validator.ValidatorImpl;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +31,9 @@ public class UserControl extends BaseControl {
 
    @Autowired
     private HttpServletRequest httpServletRequest;
+
+   @Autowired
+   private ValidatorImpl validator;
 
     @RequestMapping("login")
     @ResponseBody
@@ -55,17 +60,22 @@ public class UserControl extends BaseControl {
 
         //用户注册
 
-        if(StringUtils.isEmpty(userVO.getName())
-        || StringUtils.isEmpty(userVO.getEncrpt_password())
-        || StringUtils.isEmpty(userVO.getVarificationCode())
-        || userVO.getGender() == null
-        || userVO.getAge() == null
-        || StringUtils.isEmpty(userVO.getTelephone())
-        ){
-            throw new BusinessException(EmBusinssError.USER_NOTE_EXISTS);
-        }
+//        if(StringUtils.isEmpty(userVO.getName())
+//        || StringUtils.isEmpty(userVO.getEncrpt_password())
+//        || StringUtils.isEmpty(userVO.getVarificationCode())
+//        || userVO.getGender() == null
+//        || userVO.getAge() == null
+//        || StringUtils.isEmpty(userVO.getTelephone())
+//        ){
+//            throw new BusinessException(EmBusinssError.USER_NOTE_EXISTS);
+//        }
+
 
         UserModel userModel = this.convertFormUservo(userVO);
+        ValidationResult result = validator.validate(userModel);
+        if (result.isHasErros()) {
+            throw new BusinessException(EmBusinssError.PARAMTER_NOT_VALID,result.getErroMsg());
+        }
         userService.addUser(userModel);
         return CommonReturnType.create(userModel);
     }

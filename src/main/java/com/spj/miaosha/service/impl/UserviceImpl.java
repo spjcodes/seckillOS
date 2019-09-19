@@ -8,6 +8,7 @@ import com.spj.miaosha.erro.BusinessException;
 import com.spj.miaosha.erro.EmBusinssError;
 import com.spj.miaosha.service.UserService;
 import com.spj.miaosha.service.model.UserModel;
+import com.spj.miaosha.validator.ValidatorImpl;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,9 @@ public class UserviceImpl implements UserService {
     @Autowired
 
     private UserPasswordDOMapper userPasswordDOMapper;
+
+    @Autowired
+    private ValidatorImpl validator;
 
     @Override
     public UserModel getUser(String id) {
