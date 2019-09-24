@@ -5,7 +5,7 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 
-public class productModel {
+public class ProductModel {
     //主键
     @Getter
     @Setter
@@ -25,11 +25,11 @@ public class productModel {
     //价格
     @Getter
     @Setter
-    BigDecimal price;
+    Double price;
     //推荐星数 recommendation reate
     @Getter
     @Setter
-    int recomRate;
+    Integer recomRate;
     //评论
     @Getter
     @Setter
@@ -37,9 +37,9 @@ public class productModel {
     //销量
     @Getter
     @Setter
-    int sales;
+    Integer cales;
     //库存
     @Getter
     @Setter
-    int inventory;
+    Integer inventory;
 }

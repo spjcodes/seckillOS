@@ -1,6 +1,6 @@
 package com.spj.miaosha.dataobject;
 
-public class invoentProducts {
+public class InvoentProductsDO {
     private String id;
 
     private Integer inventory;

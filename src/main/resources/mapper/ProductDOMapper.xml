@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.spj.miaosha.dao.productMapper">
-  <resultMap id="BaseResultMap" type="com.spj.miaosha.dataobject.product">
+<mapper namespace="com.spj.miaosha.dao.ProductDOMapper">
+  <resultMap id="BaseResultMap" type="com.spj.miaosha.dataobject.ProductDO">
     <id column="id" jdbcType="VARCHAR" property="id" />
     <result column="productName" jdbcType="VARCHAR" property="productname" />
     <result column="descri" jdbcType="VARCHAR" property="descri" />
     <result column="img_url" jdbcType="VARCHAR" property="imgUrl" />
-    <result column="price" jdbcType="BIGINT" property="price" />
+    <result column="price" jdbcType="DECIMAL" property="price" />
     <result column="recom_rate" jdbcType="INTEGER" property="recomRate" />
     <result column="comment" jdbcType="VARCHAR" property="comment" />
     <result column="cales" jdbcType="INTEGER" property="cales" />
@@ -25,17 +25,25 @@
     delete from product
     where id = #{id,jdbcType=VARCHAR}
   </delete>
-  <insert id="insert" parameterType="com.spj.miaosha.dataobject.product">
-    insert into product (id, productName, descri, 
+  <insert id="insert" parameterType="com.spj.miaosha.dataobject.ProductDO">
+    <!--主键使用uuid生成策略-->
+    <selectKey keyProperty="id" resultType="String" order="BEFORE">
+      select replace(uuid(),'-','') from dual
+    </selectKey>
+    insert into product (id, productName, descri,
       img_url, price, recom_rate, 
       comment, cales, inventory
       )
     values (#{id,jdbcType=VARCHAR}, #{productname,jdbcType=VARCHAR}, #{descri,jdbcType=VARCHAR}, 
-      #{imgUrl,jdbcType=VARCHAR}, #{price,jdbcType=BIGINT}, #{recomRate,jdbcType=INTEGER}, 
+      #{imgUrl,jdbcType=VARCHAR}, #{price,jdbcType=DECIMAL}, #{recomRate,jdbcType=INTEGER}, 
       #{comment,jdbcType=VARCHAR}, #{cales,jdbcType=INTEGER}, #{inventory,jdbcType=INTEGER}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.spj.miaosha.dataobject.product">
+  <insert id="insertSelective" parameterType="com.spj.miaosha.dataobject.ProductDO">
+    <!--主键使用uuid生成策略-->
+    <selectKey keyProperty="id" resultType="String" order="BEFORE">
+      select replace(uuid(),'-','') from dual
+    </selectKey>
     insert into product
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -80,7 +88,7 @@
         #{imgUrl,jdbcType=VARCHAR},
       </if>
       <if test="price != null">
-        #{price,jdbcType=BIGINT},
+        #{price,jdbcType=DECIMAL},
       </if>
       <if test="recomRate != null">
         #{recomRate,jdbcType=INTEGER},
@@ -96,7 +104,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.spj.miaosha.dataobject.product">
+  <update id="updateByPrimaryKeySelective" parameterType="com.spj.miaosha.dataobject.ProductDO">
     update product
     <set>
       <if test="productname != null">
@@ -109,7 +117,7 @@
         img_url = #{imgUrl,jdbcType=VARCHAR},
       </if>
       <if test="price != null">
-        price = #{price,jdbcType=BIGINT},
+        price = #{price,jdbcType=DECIMAL},
       </if>
       <if test="recomRate != null">
         recom_rate = #{recomRate,jdbcType=INTEGER},
@@ -126,16 +134,23 @@
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.spj.miaosha.dataobject.product">
+  <update id="updateByPrimaryKey" parameterType="com.spj.miaosha.dataobject.ProductDO">
     update product
     set productName = #{productname,jdbcType=VARCHAR},
       descri = #{descri,jdbcType=VARCHAR},
       img_url = #{imgUrl,jdbcType=VARCHAR},
-      price = #{price,jdbcType=BIGINT},
+      price = #{price,jdbcType=DECIMAL},
       recom_rate = #{recomRate,jdbcType=INTEGER},
       comment = #{comment,jdbcType=VARCHAR},
       cales = #{cales,jdbcType=INTEGER},
       inventory = #{inventory,jdbcType=INTEGER}
     where id = #{id,jdbcType=VARCHAR}
   </update>
+
+  <select id="selectIdByName" parameterType="string" resultType="string">
+    select id
+    from product
+    where productName = #{productName ,jdbcType=VARCHAR }
+  </select>
+
 </mapper>

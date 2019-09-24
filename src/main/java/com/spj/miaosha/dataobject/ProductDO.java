@@ -1,15 +1,17 @@
 package com.spj.miaosha.dataobject;
 
-public class product {
+import java.math.BigDecimal;
+
+public class ProductDO {
     private String id;
 
-    private String productname;
+    private String productName;
 
     private String descri;
 
     private String imgUrl;
 
-    private Long price;
+    private BigDecimal price;
 
     private Integer recomRate;
 
@@ -28,11 +30,11 @@ public class product {
     }
 
     public String getProductname() {
-        return productname;
+        return productName;
     }
 
     public void setProductname(String productname) {
-        this.productname = productname == null ? null : productname.trim();
+        this.productName = productname == null ? null : productname.trim();
     }
 
     public String getDescri() {
@@ -51,11 +53,11 @@ public class product {
         this.imgUrl = imgUrl == null ? null : imgUrl.trim();
     }
 
-    public Long getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(Long price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 

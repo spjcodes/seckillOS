@@ -48,12 +48,12 @@
             <!--enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false"-->
             <!--selectByExampleQueryId="false">-->
         <!--</table>-->
-        <table tableName="product" domainObjectName="product" enableCountByExample="false"
+        <table tableName="product" domainObjectName="ProductDO" enableCountByExample="false"
                enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
                selectByExampleQueryId="false">
         </table>
 
-        <table tableName="invoentory_product" domainObjectName="invoentProducts" enableCountByExample="false"
+        <table tableName="invoentory_product" domainObjectName="InvoentProductsDO" enableCountByExample="false"
                enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
                selectByExampleQueryId="false">
         </table>

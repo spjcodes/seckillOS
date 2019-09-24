@@ -14,7 +14,7 @@ spring:
 logging:
   level:
     root: info
-    com.spj.mybatis.dao: debug
+    com.spj.miaosha.dao: debug
 
 mybatis:
 #  映射文件路径 在resource文件夹下用classpath：表示
